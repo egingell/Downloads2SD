@@ -19,6 +19,7 @@ public class Interplanetary {
 	public final static HashMap<String,String> revCatalog = new HashMap<String,String>();
 	public static Map<String,?> prefsMap;
 	public static void init(String callingClassName) {
+		tags.clear();
 		for (String s : new String[] {
 			"DIRECTORY_MUSIC",
 			"DIRECTORY_PODCASTS",

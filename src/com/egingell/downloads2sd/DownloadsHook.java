@@ -61,7 +61,8 @@ public class DownloadsHook extends Activity {
 			try {
 				Intent intent = new Intent(getBaseContext(), FileDialog.class);
 				String key = (String) button.getTag();
-				String path = prefs.getString(key, System.getenv(key));
+				EditText ev = (EditText) findViewByTag(key + "_edit");
+				String path = prefs.getString(key, ev.getText().toString());
                 intent.putExtra(FileDialog.START_PATH, path);
                 intent.putExtra("whichDialog", key);
                 

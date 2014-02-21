@@ -14,9 +14,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	public static String PATH = null;
-	final static File sDir = new File(Environment.getDataDirectory(), "data/com.egingell.downloads2sd/shared_prefs");
-	final static File prefsFile = new File(sDir, "prefs.xml"); 
-	final static XSharedPreferences xprefs = new XSharedPreferences(prefsFile);
+	final static File sDir = new File(Environment.getDataDirectory(), "data/com.egingell.downloads2sd/shared_prefs/prefs.xml");
+	final static XSharedPreferences xprefs = new XSharedPreferences(sDir);
 	public XHook() {
 		xprefs.makeWorldReadable();
 		Interplanetary.init(this.getClass().getName());
@@ -34,8 +33,6 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 				XposedHelpers.findAndHookMethod(clazz, "getExternalStoragePublicDirectory", String.class, new XC_MethodReplacement() {
 					@Override
 					protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-						xprefs.reload();
-						Interplanetary.prefsMap = xprefs.getAll();
 						String returnObject = ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args)).getPath(),
 							key = Interplanetary.revCatalog.get((String) param.args[0]),
 							path = (String) Interplanetary.prefsMap.get(key);
