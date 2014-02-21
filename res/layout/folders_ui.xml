@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp" >
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/switchSdCards"
+            android:textSize="18sp" />
+
+    	<ScrollView
+		    android:id="@+id/scrollView1"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:fillViewport="true" >
+	
+		    <LinearLayout
+		        android:id="@+id/top"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical"
+		        android:paddingBottom="5dp"
+		        android:paddingLeft="5dp"
+		        android:paddingRight="5dp"
+		        android:paddingTop="5dp" />
+	
+	</ScrollView>
+</LinearLayout>

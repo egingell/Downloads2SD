@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="location">Location</string>
+    <string name="cant_read_folder">folder can\'t be read!</string>
+    <string name="nnew">New</string>
+    <string name="select">Select</string>
+    <string name="file_name">File name:</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Save</string>
+    <string name="no_data">No Data</string>
+    <color name="gray">#ffff0000</color>
+    <string name="err">Error</string>
+    <string name="app_name">Downloads2SD</string>
+    <string name="switchSdCards">Choose the form of the destructor!</string>
+    <string name="sdCardException">Can\'t find external SD card. Maybe your kernel doesn\'t have the proper variable, SECONDARY_STORAGE, exported.</string>
+    <string name="dataCache">Data Cache*</string>
+    <string name="browse">Browse&#8230;</string>
+    <string name="blank"></string>
+    <string name="header">Pick your paths.</string>
+    <string name="dataCacheHint">/data/data/com.android.providers.downloads/cache</string>
+    <string name="sdCard">SD Card*</string>
+    <string name="sdCardHint">/sdcard/Download</string>
+    <string name="caveates">* The DownloadManager must have read/write access to the chosen folder.</string>
+</resources>
