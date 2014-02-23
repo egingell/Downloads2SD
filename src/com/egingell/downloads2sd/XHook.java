@@ -33,11 +33,24 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 				XposedHelpers.findAndHookMethod(clazz, "getExternalStoragePublicDirectory", String.class, new XC_MethodReplacement() {
 					@Override
 					protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-						String returnObject = ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args)).getPath(),
-							key = Interplanetary.revCatalog.get((String) param.args[0]),
-							path = (String) Interplanetary.prefsMap.get(key);
-						XposedBridge.log(key + " : " + returnObject + " => " + path);
-						return new File(path == null ? returnObject : path);
+						File oldFile = ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args)),
+							 newFile = null;
+						String oldPath = oldFile.getPath(),
+							   key = Interplanetary.revCatalog.get((String) param.args[0]),
+							   newPath = (String) Interplanetary.prefsMap.get(key);
+						boolean isDirectory, exists, canRead, canWrite, canExecute;
+						isDirectory = exists = canRead = canWrite =	canExecute = false;
+						if (newPath != null) {
+							newFile = new File(newPath);
+							isDirectory = newFile.isDirectory();
+							exists = newFile.exists();
+							canRead = newFile.canRead();
+							canWrite = newFile.canWrite();
+							canExecute = newFile.canExecute();
+						}
+						String perms = (exists ? "e" : "-") + (isDirectory ? "d" : "-") + (canRead ? "r" : "-") + (canWrite ? "w" : "-") + (canExecute ? "x" : "-");
+						XposedBridge.log(key + " : " + oldPath + " => " + newPath + " (" + perms + ")");
+						return (newFile == null ||! isDirectory ||! exists ||! canRead ||! canWrite) ? oldFile : newFile;
 					}
 				});
 			} catch(Throwable e) {
