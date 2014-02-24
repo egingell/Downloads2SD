@@ -50,7 +50,6 @@ public class DownloadsHook extends Activity {
 			for (String s : Interplanetary.tags) {
 				addLayout(s);
 			}
-			
 		} catch (Throwable e) {
 			Log.e(Interplanetary.ME, Interplanetary.date(), e);
 		}

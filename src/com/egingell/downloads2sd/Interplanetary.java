@@ -18,6 +18,7 @@ public class Interplanetary {
 	public final static HashMap<String,String> catalog = new HashMap<String,String>();
 	public final static HashMap<String,String> revCatalog = new HashMap<String,String>();
 	public static Map<String,?> prefsMap;
+	static public Class<?> constants;
 	public static void init(String callingClassName) {
 		tags.clear();
 		for (String s : new String[] {
