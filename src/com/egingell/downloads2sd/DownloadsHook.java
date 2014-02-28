@@ -46,7 +46,6 @@ public class DownloadsHook extends Activity {
 			prefs = getSharedPreferences("prefs", Context.MODE_WORLD_READABLE);
 			prefs.edit().putBoolean("prefsmade", true).commit();
 			listCount = 0;
-			
 			for (String s : Interplanetary.tags) {
 				addLayout(s);
 			}

@@ -1,6 +1,7 @@
 /*
  * logcat | grep "file:///storage/extSdCard/Download"
- * logcat | grep "download2sd"
+ * logcat | grep "downloads2sd"
+ * tail -f -n 100 /data/data/de.robv.android.xposed.installer/log/debug.log
  */
 
 package com.egingell.downloads2sd;
@@ -19,7 +20,6 @@ import android.util.Log;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
@@ -81,77 +81,15 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 		}
 		try {
 			if (lpparam.packageName.equals("com.android.providers.downloads")) {
-				try {
-					final Class<?> cStorageManager = Class.forName("com.android.providers.downloads.StorageManager");
-					final Class<?> cConstants = Class.forName("com.android.providers.downloads.Constants");
-					final Class<?> cDownloadsImpl = Class.forName("android.provider.Downloads$Impl");
-					XposedBridge.hookAllConstructors(cStorageManager, new XC_MethodHook() {
-						final Pattern pattern = Pattern.compile("[\\s]+");
-						final File partitions = new File("/proc/partitions"),
-								   mounts = new File("/proc/mounts");
-						private File[] findExtSdCards() {
-							String line, line2;
-							ArrayList<File> out = new ArrayList<File>();
-							final ArrayList<String> partitionsLines = new ArrayList<String>(),
-											  mountsLines = new ArrayList<String>();
-							File[] files = null;
-							try {
-								FileInputStream partitionsIs = new FileInputStream(partitions),
-													  mountsIs = new FileInputStream(mounts);
-								BufferedReader partitionsReader = new BufferedReader(new InputStreamReader(partitionsIs)),
-											   		 mountsReader = new BufferedReader(new InputStreamReader(mountsIs));
-								while ((line = partitionsReader.readLine()) != null) {
-									partitionsLines.add(line);
-								}
-								while ((line2 = mountsReader.readLine()) != null) {
-									mountsLines.add(line2);
-								}
-								partitionsReader.close();
-								mountsReader.close();
-								for (String s : partitionsLines) {
-									line = s;
-									String[] info = pattern.split(line);
-									int i = 0;
-									for (String d : info) {
-										Log.d("downloads2sd", Interplanetary.date() + ": info[" + (i++) + "] = '" + d + "'");
-									}
-									String vold = "/dev/block/vold/" + info[1] + ":" + info[2],
-										   device = "/dev/block/" + info[4];
-									for (String s2 : mountsLines) {
-										line2 = s2;
-										String[] info2 = pattern.split(line2);
-										if (info2[0].equals(vold) || info2[0].equals(device)) {
-											out.add(new File(info[1]));
-										}
-										int i1 = 0;
-										for (String d : info2) {
-											Log.d("downloads2sd", Interplanetary.date() + ": info2[" + (i1++) + "] = '" + d + "'");
-										}
-									}
-								}
-								if (out.size() > 0) {
-									files = new File[out.size()];
-									int i = 0;
-									for (File f : out) {
-										files[i++] = f;
-						        		Log.d("downloads2sd", Interplanetary.date() + ": " + f.getPath());
-									}
-								} else {
-									Log.d("downloads2sd", Interplanetary.date() + ": no files added.");
-								}
-							} catch (Throwable e) {
-								XposedBridge.log(e);
-							}
-							return files;
-						}
-						@Override
-		                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-							XposedHelpers.setAdditionalInstanceField(cStorageManager, "mExternalStoragePublicDir", findExtSdCards());
-						}
-					});
+				final File[] mExternalStoragePublicDir = findExtSdCards();
+		        try {
+					final Class<?> cStorageManager = XposedHelpers.findClass("com.android.providers.downloads.StorageManager", lpparam.classLoader);
+					final Class<?> cConstants = XposedHelpers.findClass("com.android.providers.downloads.Constants", lpparam.classLoader);
+					final Class<?> cDownloadsImpl = XposedHelpers.findClass("android.provider.Downloads$Impl", lpparam.classLoader);
 					XposedHelpers.findAndHookMethod(cStorageManager, "verifySpace", int.class, String.class, long.class, new XC_MethodReplacement() {
 						@Override
 						protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+							Log.d(Interplanetary.ME, "Calling com.android.providers.downloads.StorageManager#verifySpace");
 							XposedHelpers.callMethod(param.thisObject, "resetBytesDownloadedSinceLastCheckOnSpace");
 							int destination = (Integer) param.args[0];
 							String path = (String) param.args[1];
@@ -160,8 +98,7 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 					        File dir = null;
 					        if (XposedHelpers.getStaticBooleanField(cConstants, "LOGV")) {
 					        	
-					            Log.i((String) XposedHelpers.getStaticObjectField(cConstants, "TAG"), "in verifySpace, destination: " + destination +
-					                    ", path: " + path + ", length: " + length);
+					            Log.i((String) XposedHelpers.getStaticObjectField(cConstants, "TAG"), "in verifySpace, destination: " + destination + ", path: " + path + ", length: " + length);
 					        }
 					        if (path == null) {
 					            throw new IllegalArgumentException("path can't be null");
@@ -169,7 +106,6 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 					        File mExternalStorageDir = (File) XposedHelpers.getObjectField(param.thisObject, "mExternalStorageDir"),
 					        	 mSystemCacheDir = (File) XposedHelpers.getObjectField(param.thisObject, "mSystemCacheDir"),
 					        	 mDownloadDataDir = (File) XposedHelpers.getObjectField(param.thisObject, "mDownloadDataDir");
-					        File[] mExternalStoragePublicDir = (File[]) XposedHelpers.getAdditionalInstanceField(cStorageManager, "mExternalStoragePublicDir");
 					        final int DESTINATION_CACHE_PARTITION = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_CACHE_PARTITION"),
 					        		  DESTINATION_CACHE_PARTITION_NOROAMING = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_CACHE_PARTITION_NOROAMING"),
 					        		  DESTINATION_CACHE_PARTITION_PURGEABLE = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_CACHE_PARTITION_PURGEABLE"),
@@ -212,7 +148,7 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 					XposedHelpers.findAndHookMethod("com.android.providers.downloads.DownloadProvider", lpparam.classLoader, "checkFileUriDestination", ContentValues.class, new XC_MethodReplacement() {
 						@Override
 						protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-							Log.d("Downloads2SD", "Calling com.android.providers.downloads.DownloadProvider#checkFileUriDestination");
+							Log.d(Interplanetary.ME, "Calling com.android.providers.downloads.DownloadProvider#checkFileUriDestination");
 							ContentValues values = (ContentValues) param.args[0];
 							String fileUri = values.getAsString(hint);
 					        if (fileUri == null) {
@@ -237,5 +173,62 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 		} catch(Throwable e) {
 			XposedBridge.log(e);
 		}
+	}
+	final Pattern pattern = Pattern.compile("[\\s]+");
+	final File partitions = new File("/proc/partitions"),
+			   mounts = new File("/proc/mounts");
+	public File[] findExtSdCards() {
+		String line, line2;
+		ArrayList<File> out = new ArrayList<File>();
+		final ArrayList<String> partitionsLines = new ArrayList<String>(),
+						  mountsLines = new ArrayList<String>();
+		File[] files = null;
+		try {
+			FileInputStream partitionsIs = new FileInputStream(partitions),
+								  mountsIs = new FileInputStream(mounts);
+			BufferedReader partitionsReader = new BufferedReader(new InputStreamReader(partitionsIs)),
+						   		 mountsReader = new BufferedReader(new InputStreamReader(mountsIs));
+			while ((line = partitionsReader.readLine()) != null) {
+				partitionsLines.add(line);
+			}
+			while ((line2 = mountsReader.readLine()) != null) {
+				mountsLines.add(line2);
+			}
+			partitionsReader.close();
+			mountsReader.close();
+			for (String s : partitionsLines) {
+				line = s.trim();
+				String[] info = pattern.split(line);
+				if (info.length < 4) continue;
+				Log.d(Interplanetary.ME, Interplanetary.date() + ": info[0] = '" + info[0] + "'");
+				Log.d(Interplanetary.ME, Interplanetary.date() + ": info[1] = '" + info[1] + "'");
+				Log.d(Interplanetary.ME, Interplanetary.date() + ": info[3] = '" + info[3] + "'");
+				String vold = "/dev/block/vold/" + info[0] + ":" + info[1],
+					   device = "/dev/block/" + info[3];
+				for (String s2 : mountsLines) {
+					line2 = s2.trim();
+					String[] info2 = pattern.split(line2);
+					if (info2.length < 6) continue;
+					if (info2[0].equals(vold) || info2[0].equals(device)) {
+						out.add(new File(info2[1]));
+					}
+					Log.d(Interplanetary.ME, Interplanetary.date() + ": info2[0] = '" + info2[0] + "'");
+					Log.d(Interplanetary.ME, Interplanetary.date() + ": info2[1] = '" + info2[1] + "'");
+				}
+			}
+			if (out.size() > 0) {
+				files = new File[out.size()];
+				int i = 0;
+				for (File f : out) {
+					files[i++] = f;
+	        		Log.d(Interplanetary.ME, Interplanetary.date() + ": " + f.getPath());
+				}
+			} else {
+				Log.e(Interplanetary.ME, Interplanetary.date() + ": no directories added.");
+			}
+		} catch (Throwable e) {
+			Log.e(Interplanetary.ME, Interplanetary.date(), e);
+		}
+		return files;
 	}
 }
