@@ -1,0 +1,9 @@
+-----------------
+Feb 24, 2014 7:35:10 AM UTC
+Loading Xposed v42 (for Zygote)...
+Loading modules from /data/app/com.egingell.downloads2sd-2.apk
+  Loading class com.egingell.downloads2sd.XHook
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/sdcard1/Download (edrwx)
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/sdcard1/Download (edrwx)
