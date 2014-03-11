@@ -1,0 +1,438 @@
+-----------------
+Feb 28, 2014 2:50:16 PM UTC
+Loading Xposed v42 (for Zygote)...
+Loading modules from /data/app/pk.qwerty12.nfclockscreenoffenabler-1.apk
+  Loading class pk.qwerty12.nfclockscreenoffenabler.NFCLockScreenOffEnabler
+Loading modules from /data/app/de.defim.apk.notifyclean-1.apk
+  Loading class de.defim.apk.notifyclean.Xposed
+    [NotifyClean] 2014-02-28 14:50:16  loaded restricted packages: 3
+    [NotifyClean] 2014-02-28 14:50:16  loaded additional settings: 2
+    [NotifyClean] 2014-02-28 14:50:16  loaded set priority scores: 5
+    [NotifyClean] 2014-02-28 14:50:16  loaded configured patterns: 0
+    [NotifyClean] 2014-02-28 14:50:16  loaded dont-track packages: 0
+    [NotifyClean] 2014-02-28 14:50:16  loaded loquacious packages: 9
+    [NotifyClean] 2014-02-28 14:50:16  loaded notification events: 15
+  Loading class de.defim.apk.notifyclean.Xcheck
+Loading modules from /data/app/com.zst.xposed.xuimod-1.apk
+  Loading class com.zst.xposed.xuimod.XuiMod
+Loading modules from /data/app/pl.com.android.translucent.recent-1.apk
+  Loading class pl.com.android.translucent.recent.MainXposed
+Loading modules from /data/app/com.mohammadag.statusbarscrolltotop-1.apk
+  Loading class com.mohammadag.statusbarscrolltotop.XposedMod
+Loading modules from /data/app/de.robv.android.xposed.mods.appsettings-1.apk
+  Loading class de.robv.android.xposed.mods.appsettings.XposedMod
+Loading modules from /data/app/com.germainz.crappalinks-1.apk
+  Loading class com.germainz.crappalinks.CrappaLinks
+Loading modules from /data/app/com.oasisfeng.greenify-1.apk
+  Loading class com.oasisfeng.greenify.pro.FrameworkPatch
+Loading modules from /data/app/ccc71.at.free-2.apk
+  Loading class ccc71.at.xposed.at_xposed_enabled
+  Loading class ccc71.at.xposed.at_remove_battery_icon
+  Loading class ccc71.at.xposed.at_remove_low_battery_warning
+  Loading class ccc71.at.xposed.at_apps
+  Loading class ccc71.at.xposed.at_fix_mnt_asec
+Loading modules from /data/app/com.mohammadag.burnttoast-2.apk
+  Loading class com.mohammadag.burnttoast.XposedMod
+Loading modules from /data/app/de.robv.android.xposed.mods.playstorefix-1.apk
+  Loading class de.robv.android.xposed.mods.playstorefix.PlayStoreFix
+Loading modules from /data/app/com.germainz.activityforcenewtask-1.apk
+  Loading class com.germainz.activityforcenewtask.XposedMod
+Loading modules from /data/app/com.haiduongbk.hkthememanager-2.apk
+  Loading class com.haiduongbk.hkthememanager.Settings_hdbk
+53ms: Android
+Loading modules from /data/app/de.defim.apk.bootmanager-1.apk
+  Loading class de.defim.apk.bootmanager.Xposed
+    [BootManager] 2014-02-28 14:50:17  loaded 11 restricted apps
+  Loading class de.defim.apk.bootmanager.Xcheck
+Loading modules from /data/app/com.mohammadag.colouredstatusbar-1.apk
+  Loading class com.mohammadag.colouredstatusbar.ColourChangerMod
+Loading modules from /data/app/com.egingell.downloads2sd-2.apk
+  Loading class com.egingell.downloads2sd.XHook
+Loading modules from /data/app/com.ceco.kitkat.gravitybox-1.apk
+  Loading class com.ceco.kitkat.gravitybox.GravityBox
+GB:Hardware: qcom
+GB:Product: omni_jfltevzw
+GB:Device manufacturer: samsung
+GB:Device brand: samsung
+GB:Device model: SCH-I545
+GB:Device type: phone
+GB:Is MTK device: false
+GB:Is Xperia device: false
+GB:Is Moto XT device: false
+GB:Has telephony support: true
+GB:Has Gemini support: false
+GB:Android SDK: 19
+GB:Android Release: 4.4.2
+GB:ROM: omni_jfltevzw-userdebug 4.4.2 KVT49L 157 test-keys
+java.lang.NoSuchMethodError: com.android.internal.policy.impl.PhoneWindowManager#handleLongPressOnHome()#exact
+	at de.robv.android.xposed.XposedHelpers.findMethodExact(XposedHelpers.java:208)
+	at de.robv.android.xposed.XposedHelpers.findMethodExact(XposedHelpers.java:155)
+	at de.robv.android.xposed.XposedHelpers.findAndHookMethod(XposedHelpers.java:167)
+	at com.ceco.kitkat.gravitybox.ModHwKeys.initZygote(ModHwKeys.java:689)
+	at com.ceco.kitkat.gravitybox.GravityBox.initZygote(GravityBox.java:63)
+	at de.robv.android.xposed.XposedBridge.loadModule(XposedBridge.java:364)
+	at de.robv.android.xposed.XposedBridge.loadModules(XposedBridge.java:317)
+	at de.robv.android.xposed.XposedBridge.main(XposedBridge.java:114)
+	at dalvik.system.NativeStart.main(Native Method)
+Loading modules from /data/app/tw.fatminmin.xposed.networkspeedindicator-1.apk
+  Loading class tw.fatminmin.xposed.networkspeedindicator.Module
+Hooking: android from /data/data/ccc71.at.free/xposed/at_crystal_apps
+Hooking: android from /data/data/ccc71.at.free/xposed/at_sd_apps
+9ms: net.dinglisch.android.taskerm
+269ms: com.yahoo.mobile.client.android.weather
+java.lang.ClassNotFoundException: com.android.providers.downloads.StorageManager
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:251)
+	at java.lang.Class.forName(Class.java:216)
+	at com.egingell.downloads2sd.XHook.handleLoadPackage(XHook.java:85)
+	at de.robv.android.xposed.IXposedHookLoadPackage$Wrapper.handleLoadPackage(IXposedHookLoadPackage.java:20)
+	at de.robv.android.xposed.callbacks.XC_LoadPackage.call(XC_LoadPackage.java:34)
+	at de.robv.android.xposed.callbacks.XCallback.callAll(XCallback.java:70)
+	at de.robv.android.xposed.XposedBridge$4.afterHookedMethod(XposedBridge.java:246)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:561)
+	at android.app.LoadedApk.<init>(Native Method)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1647)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1610)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1583)
+	at android.app.ContextImpl.createPackageContextAsUser(ContextImpl.java:1888)
+	at android.app.ContextImpl.createPackageContext(ContextImpl.java:1874)
+	at android.content.ContextWrapper.createPackageContext(ContextWrapper.java:637)
+	at android.app.ActivityThread.installProvider(ActivityThread.java:4763)
+	at android.app.ActivityThread.installContentProviders(ActivityThread.java:4385)
+	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4325)
+	at de.robv.android.xposed.XposedBridge.invokeOriginalMethodNative(Native Method)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:547)
+	at android.app.ActivityThread.handleBindApplication(Native Method)
+	at android.app.ActivityThread.access$1500(ActivityThread.java:135)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1256)
+	at android.os.Handler.dispatchMessage(Handler.java:102)
+	at android.os.Looper.loop(Looper.java:136)
+	at android.app.ActivityThread.main(ActivityThread.java:5017)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+	at de.robv.android.xposed.XposedBridge.main(XposedBridge.java:126)
+	at dalvik.system.NativeStart.main(Native Method)
+Caused by: java.lang.NoClassDefFoundError: com/android/providers/downloads/StorageManager
+	... 33 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.android.providers.downloads.StorageManager" on path: DexPathList[[zip file "/data/app/com.egingell.downloads2sd-2.apk"],nativeLibraryDirectories=[/vendor/lib, /system/lib]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:497)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
+	... 33 more
+Not hooking method com.android.systemui.statusbar.policy.BatteryController.addIconView
+Not hooking method com.android.systemui.statusbar.policy.BatteryController.addLabelView
+Not hooking method com.android.systemui.statusbar.policy.BluetoothController.addIconView
+2ms: com.android.systemui
+301ms: com.yahoo.mobile.client.android.weather
+Couldn't find field mMobileRoamingin class java.lang.reflect.Method
+Couldn't find field mEthernetin class java.lang.reflect.Method
+Couldn't find field mEthernetActivityin class java.lang.reflect.Method
+5ms: net.dinglisch.android.taskerm
+194ms: com.yahoo.mobile.client.android.weather
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+207ms: com.yahoo.mobile.client.android.weather
+3ms: net.dinglisch.android.taskerm
+3ms: net.dinglisch.android.taskerm
+3ms: net.dinglisch.android.taskerm
+4ms: net.dinglisch.android.taskerm
+237ms: com.yahoo.mobile.client.android.weather
+219ms: com.yahoo.mobile.client.android.weather
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+3ms: net.dinglisch.android.taskerm
+211ms: com.yahoo.mobile.client.android.weather
+3ms: net.dinglisch.android.taskerm
+DIRECTORY_PICTURES : /storage/emulated/0/Pictures => /storage/sdcard1/Pictures (edrwx)
+3ms: net.dinglisch.android.taskerm
+3ms: net.dinglisch.android.taskerm
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+crappalinks >> Uri: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.google.android.talk/.SigningInActivity;sourceBounds=821%20307%201072%20534;end
+listType: null
+5ms: com.android.systemui
+MainXposed : onCreate
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/emulated/0/Download (edrwx)
+MainXposed : onCreate
+crappalinks >> Uri: #Intent;launchFlags=0x10000000;component=com.greatbytes.activenotifications/.NotificationActivity;B.extra_mode_lockscreen=true;S.extra_ticker_text=;i.extra_icon=2130837635;S.extra_text=Swipe%20to%20unlock;l.extra_when=1393603900306;i.extra_notification_id=-1;S.extra_package_name=com.greatbytes.activenotifications.unlock;S.extra_title=No%20new%20notifications;end
+crappalinks >> Uri: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.ceco.kitkat.gravitybox/.GravityBoxSettings;end
+listType: null
+MainXposed : onCreate
+crappalinks >> Uri: #Intent;action=com.greatbytes.activenotifications.NOTIFICATION_LISTENER;launchFlags=0x10;component=com.greatbytes.activenotifications/.NotificationActivity;S.extra_ticker_text=xda-developers;i.extra_icon=2130837701;S.extra_text=jammasterclay%40gmail.com;l.extra_when=1393606277819;i.extra_notification_id=-1238761954;S.extra_package_name=com.google.android.gm;i.extra_number=21;S.extra_title=xda-developers;end
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+crappalinks >> Uri: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.egingell.downloads2sd/.DownloadsHook;end
+listType: null
+DIRECTORY_MUSIC : /storage/emulated/0/Music => /storage/sdcard1/Music (edrwx)
+DIRECTORY_PODCASTS : /storage/emulated/0/Podcasts => /storage/sdcard1/Podcasts (edrwx)
+DIRECTORY_RINGTONES : /storage/emulated/0/Ringtones => null (-----)
+DIRECTORY_ALARMS : /storage/emulated/0/Alarms => null (-----)
+DIRECTORY_NOTIFICATIONS : /storage/emulated/0/Notifications => null (-----)
+DIRECTORY_PICTURES : /storage/emulated/0/Pictures => /storage/sdcard1/Pictures (edrwx)
+DIRECTORY_MOVIES : /storage/emulated/0/Movies => /storage/sdcard1/Movies (edrwx)
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/emulated/0/Download (edrwx)
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+-----------------
+Feb 28, 2014 5:29:22 PM UTC
+Loading Xposed v42 (for Zygote)...
+Loading modules from /data/app/pk.qwerty12.nfclockscreenoffenabler-1.apk
+  Loading class pk.qwerty12.nfclockscreenoffenabler.NFCLockScreenOffEnabler
+Loading modules from /data/app/de.defim.apk.notifyclean-1.apk
+  Loading class de.defim.apk.notifyclean.Xposed
+    [NotifyClean] 2014-02-28 17:29:22  loaded restricted packages: 3
+    [NotifyClean] 2014-02-28 17:29:22  loaded additional settings: 2
+    [NotifyClean] 2014-02-28 17:29:22  loaded set priority scores: 5
+    [NotifyClean] 2014-02-28 17:29:22  loaded configured patterns: 0
+    [NotifyClean] 2014-02-28 17:29:22  loaded dont-track packages: 0
+    [NotifyClean] 2014-02-28 17:29:22  loaded loquacious packages: 9
+    [NotifyClean] 2014-02-28 17:29:22  loaded notification events: 15
+  Loading class de.defim.apk.notifyclean.Xcheck
+Loading modules from /data/app/com.zst.xposed.xuimod-1.apk
+  Loading class com.zst.xposed.xuimod.XuiMod
+Loading modules from /data/app/pl.com.android.translucent.recent-1.apk
+  Loading class pl.com.android.translucent.recent.MainXposed
+Loading modules from /data/app/com.mohammadag.statusbarscrolltotop-1.apk
+  Loading class com.mohammadag.statusbarscrolltotop.XposedMod
+Loading modules from /data/app/de.robv.android.xposed.mods.appsettings-1.apk
+  Loading class de.robv.android.xposed.mods.appsettings.XposedMod
+Loading modules from /data/app/com.germainz.crappalinks-1.apk
+  Loading class com.germainz.crappalinks.CrappaLinks
+Loading modules from /data/app/com.oasisfeng.greenify-1.apk
+  Loading class com.oasisfeng.greenify.pro.FrameworkPatch
+Loading modules from /data/app/ccc71.at.free-2.apk
+  Loading class ccc71.at.xposed.at_xposed_enabled
+  Loading class ccc71.at.xposed.at_remove_battery_icon
+  Loading class ccc71.at.xposed.at_remove_low_battery_warning
+  Loading class ccc71.at.xposed.at_apps
+  Loading class ccc71.at.xposed.at_fix_mnt_asec
+Loading modules from /data/app/com.mohammadag.burnttoast-2.apk
+  Loading class com.mohammadag.burnttoast.XposedMod
+Loading modules from /data/app/de.robv.android.xposed.mods.playstorefix-1.apk
+  Loading class de.robv.android.xposed.mods.playstorefix.PlayStoreFix
+Loading modules from /data/app/com.germainz.activityforcenewtask-1.apk
+  Loading class com.germainz.activityforcenewtask.XposedMod
+Loading modules from /data/app/com.haiduongbk.hkthememanager-2.apk
+  Loading class com.haiduongbk.hkthememanager.Settings_hdbk
+34ms: Android
+Loading modules from /data/app/de.defim.apk.bootmanager-1.apk
+  Loading class de.defim.apk.bootmanager.Xposed
+    [BootManager] 2014-02-28 17:29:23  loaded 11 restricted apps
+  Loading class de.defim.apk.bootmanager.Xcheck
+Loading modules from /data/app/com.mohammadag.colouredstatusbar-1.apk
+  Loading class com.mohammadag.colouredstatusbar.ColourChangerMod
+Loading modules from /data/app/com.egingell.downloads2sd-2.apk
+  Loading class com.egingell.downloads2sd.XHook
+Loading modules from /data/app/com.ceco.kitkat.gravitybox-1.apk
+  Loading class com.ceco.kitkat.gravitybox.GravityBox
+GB:Hardware: qcom
+GB:Product: omni_jfltevzw
+GB:Device manufacturer: samsung
+GB:Device brand: samsung
+GB:Device model: SCH-I545
+GB:Device type: phone
+GB:Is MTK device: false
+GB:Is Xperia device: false
+GB:Is Moto XT device: false
+GB:Has telephony support: true
+GB:Has Gemini support: false
+GB:Android SDK: 19
+GB:Android Release: 4.4.2
+GB:ROM: omni_jfltevzw-userdebug 4.4.2 KVT49L 157 test-keys
+java.lang.NoSuchMethodError: com.android.internal.policy.impl.PhoneWindowManager#handleLongPressOnHome()#exact
+	at de.robv.android.xposed.XposedHelpers.findMethodExact(XposedHelpers.java:208)
+	at de.robv.android.xposed.XposedHelpers.findMethodExact(XposedHelpers.java:155)
+	at de.robv.android.xposed.XposedHelpers.findAndHookMethod(XposedHelpers.java:167)
+	at com.ceco.kitkat.gravitybox.ModHwKeys.initZygote(ModHwKeys.java:689)
+	at com.ceco.kitkat.gravitybox.GravityBox.initZygote(GravityBox.java:63)
+	at de.robv.android.xposed.XposedBridge.loadModule(XposedBridge.java:364)
+	at de.robv.android.xposed.XposedBridge.loadModules(XposedBridge.java:317)
+	at de.robv.android.xposed.XposedBridge.main(XposedBridge.java:114)
+	at dalvik.system.NativeStart.main(Native Method)
+Loading modules from /data/app/tw.fatminmin.xposed.networkspeedindicator-1.apk
+  Loading class tw.fatminmin.xposed.networkspeedindicator.Module
+Hooking: android from /data/data/ccc71.at.free/xposed/at_crystal_apps
+Hooking: android from /data/data/ccc71.at.free/xposed/at_sd_apps
+3ms: net.dinglisch.android.taskerm
+Not hooking method com.android.systemui.statusbar.policy.BatteryController.addIconView
+Not hooking method com.android.systemui.statusbar.policy.BatteryController.addLabelView
+Not hooking method com.android.systemui.statusbar.policy.BluetoothController.addIconView
+2ms: com.android.systemui
+189ms: com.yahoo.mobile.client.android.weather
+Couldn't find field mMobileRoamingin class java.lang.reflect.Method
+Couldn't find field mEthernetin class java.lang.reflect.Method
+Couldn't find field mEthernetActivityin class java.lang.reflect.Method
+java.lang.ClassNotFoundException: com.android.providers.downloads.StorageManager
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:251)
+	at java.lang.Class.forName(Class.java:216)
+	at com.egingell.downloads2sd.XHook.handleLoadPackage(XHook.java:85)
+	at de.robv.android.xposed.IXposedHookLoadPackage$Wrapper.handleLoadPackage(IXposedHookLoadPackage.java:20)
+	at de.robv.android.xposed.callbacks.XC_LoadPackage.call(XC_LoadPackage.java:34)
+	at de.robv.android.xposed.callbacks.XCallback.callAll(XCallback.java:70)
+	at de.robv.android.xposed.XposedBridge$4.afterHookedMethod(XposedBridge.java:246)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:561)
+	at android.app.LoadedApk.<init>(Native Method)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1647)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1610)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1583)
+	at android.app.ContextImpl.createPackageContextAsUser(ContextImpl.java:1888)
+	at android.app.ContextImpl.createPackageContext(ContextImpl.java:1874)
+	at android.content.ContextWrapper.createPackageContext(ContextWrapper.java:637)
+	at android.app.ActivityThread.installProvider(ActivityThread.java:4763)
+	at android.app.ActivityThread.installContentProviders(ActivityThread.java:4385)
+	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4325)
+	at de.robv.android.xposed.XposedBridge.invokeOriginalMethodNative(Native Method)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:547)
+	at android.app.ActivityThread.handleBindApplication(Native Method)
+	at android.app.ActivityThread.access$1500(ActivityThread.java:135)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1256)
+	at android.os.Handler.dispatchMessage(Handler.java:102)
+	at android.os.Looper.loop(Looper.java:136)
+	at android.app.ActivityThread.main(ActivityThread.java:5017)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+	at de.robv.android.xposed.XposedBridge.main(XposedBridge.java:126)
+	at dalvik.system.NativeStart.main(Native Method)
+Caused by: java.lang.NoClassDefFoundError: com/android/providers/downloads/StorageManager
+	... 33 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.android.providers.downloads.StorageManager" on path: DexPathList[[zip file "/data/app/com.egingell.downloads2sd-2.apk"],nativeLibraryDirectories=[/vendor/lib, /system/lib]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:497)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
+	... 33 more
+2559ms: com.yahoo.mobile.client.android.weather
+3ms: net.dinglisch.android.taskerm
+164ms: com.yahoo.mobile.client.android.weather
+crappalinks >> Uri: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=de.robv.android.xposed.installer/.WelcomeActivity;end
+listType: null
+crappalinks >> Uri: #Intent;component=de.robv.android.xposed.installer/.XposedInstallerActivity;B.finish_on_up_navigation=true;i.opentab=1;end
+-----------------
+Feb 28, 2014 5:31:18 PM UTC
+Loading Xposed v42 (for Zygote)...
+Loading modules from /data/app/com.egingell.downloads2sd-2.apk
+  Loading class com.egingell.downloads2sd.XHook
+java.lang.ClassNotFoundException: com.android.providers.downloads.StorageManager
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:251)
+	at java.lang.Class.forName(Class.java:216)
+	at com.egingell.downloads2sd.XHook.handleLoadPackage(XHook.java:85)
+	at de.robv.android.xposed.IXposedHookLoadPackage$Wrapper.handleLoadPackage(IXposedHookLoadPackage.java:20)
+	at de.robv.android.xposed.callbacks.XC_LoadPackage.call(XC_LoadPackage.java:34)
+	at de.robv.android.xposed.callbacks.XCallback.callAll(XCallback.java:70)
+	at de.robv.android.xposed.XposedBridge$4.afterHookedMethod(XposedBridge.java:246)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:561)
+	at android.app.LoadedApk.<init>(Native Method)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1647)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1610)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1583)
+	at android.app.ContextImpl.createPackageContextAsUser(ContextImpl.java:1888)
+	at android.app.ContextImpl.createPackageContext(ContextImpl.java:1874)
+	at android.content.ContextWrapper.createPackageContext(ContextWrapper.java:637)
+	at android.app.ActivityThread.installProvider(ActivityThread.java:4763)
+	at android.app.ActivityThread.installContentProviders(ActivityThread.java:4385)
+	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4325)
+	at de.robv.android.xposed.XposedBridge.invokeOriginalMethodNative(Native Method)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:547)
+	at android.app.ActivityThread.handleBindApplication(Native Method)
+	at android.app.ActivityThread.access$1500(ActivityThread.java:135)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1256)
+	at android.os.Handler.dispatchMessage(Handler.java:102)
+	at android.os.Looper.loop(Looper.java:136)
+	at android.app.ActivityThread.main(ActivityThread.java:5017)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+	at de.robv.android.xposed.XposedBridge.main(XposedBridge.java:126)
+	at dalvik.system.NativeStart.main(Native Method)
+Caused by: java.lang.NoClassDefFoundError: com/android/providers/downloads/StorageManager
+	... 33 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.android.providers.downloads.StorageManager" on path: DexPathList[[zip file "/data/app/com.egingell.downloads2sd-2.apk"],nativeLibraryDirectories=[/vendor/lib, /system/lib]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:497)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
+	... 33 more
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+java.lang.ClassNotFoundException: com.android.providers.downloads.StorageManager
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:251)
+	at java.lang.Class.forName(Class.java:216)
+	at com.egingell.downloads2sd.XHook.handleLoadPackage(XHook.java:85)
+	at de.robv.android.xposed.IXposedHookLoadPackage$Wrapper.handleLoadPackage(IXposedHookLoadPackage.java:20)
+	at de.robv.android.xposed.callbacks.XC_LoadPackage.call(XC_LoadPackage.java:34)
+	at de.robv.android.xposed.callbacks.XCallback.callAll(XCallback.java:70)
+	at de.robv.android.xposed.XposedBridge$4.afterHookedMethod(XposedBridge.java:246)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:561)
+	at android.app.LoadedApk.<init>(Native Method)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1647)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1610)
+	at android.app.ActivityThread.getPackageInfo(ActivityThread.java:1583)
+	at android.app.ContextImpl.createPackageContextAsUser(ContextImpl.java:1888)
+	at android.app.ContextImpl.createPackageContext(ContextImpl.java:1874)
+	at android.content.ContextWrapper.createPackageContext(ContextWrapper.java:637)
+	at android.app.ActivityThread.installProvider(ActivityThread.java:4763)
+	at android.app.ActivityThread.installContentProviders(ActivityThread.java:4385)
+	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4325)
+	at de.robv.android.xposed.XposedBridge.invokeOriginalMethodNative(Native Method)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:547)
+	at android.app.ActivityThread.handleBindApplication(Native Method)
+	at android.app.ActivityThread.access$1500(ActivityThread.java:135)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1256)
+	at android.os.Handler.dispatchMessage(Handler.java:102)
+	at android.os.Looper.loop(Looper.java:136)
+	at android.app.ActivityThread.main(ActivityThread.java:5017)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+	at de.robv.android.xposed.XposedBridge.main(XposedBridge.java:126)
+	at dalvik.system.NativeStart.main(Native Method)
+Caused by: java.lang.NoClassDefFoundError: com/android/providers/downloads/StorageManager
+	... 33 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.android.providers.downloads.StorageManager" on path: DexPathList[[zip file "/data/app/com.egingell.downloads2sd-2.apk"],nativeLibraryDirectories=[/vendor/lib, /system/lib]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:497)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
+	... 33 more
+DIRECTORY_DCIM : /storage/emulated/0/DCIM => /storage/sdcard1/Pictures/DCIM (edrwx)
+DIRECTORY_PICTURES : /storage/emulated/0/Pictures => /storage/sdcard1/Pictures (edrwx)
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/sdcard1/Downloads (edrwx)
+java.lang.ClassNotFoundException: com.android.providers.downloads.StorageManager
+	at java.lang.Class.classForName(Native Method)
+	at java.lang.Class.forName(Class.java:251)
+	at java.lang.Class.forName(Class.java:216)
+	at com.egingell.downloads2sd.XHook.handleLoadPackage(XHook.java:85)
+	at de.robv.android.xposed.IXposedHookLoadPackage$Wrapper.handleLoadPackage(IXposedHookLoadPackage.java:20)
+	at de.robv.android.xposed.callbacks.XC_LoadPackage.call(XC_LoadPackage.java:34)
+	at de.robv.android.xposed.callbacks.XCallback.callAll(XCallback.java:70)
+	at de.robv.android.xposed.XposedBridge$2.beforeHookedMethod(XposedBridge.java:202)
+	at de.robv.android.xposed.XposedBridge.handleHookedMethod(XposedBridge.java:527)
+	at android.app.ActivityThread.handleBindApplication(Native Method)
+	at android.app.ActivityThread.access$1500(ActivityThread.java:135)
+	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1256)
+	at android.os.Handler.dispatchMessage(Handler.java:102)
+	at android.os.Looper.loop(Looper.java:136)
+	at android.app.ActivityThread.main(ActivityThread.java:5017)
+	at java.lang.reflect.Method.invokeNative(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:515)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+	at de.robv.android.xposed.XposedBridge.main(XposedBridge.java:126)
+	at dalvik.system.NativeStart.main(Native Method)
+Caused by: java.lang.NoClassDefFoundError: com/android/providers/downloads/StorageManager
+	... 21 more
+Caused by: java.lang.ClassNotFoundException: Didn't find class "com.android.providers.downloads.StorageManager" on path: DexPathList[[zip file "/data/app/com.egingell.downloads2sd-2.apk"],nativeLibraryDirectories=[/vendor/lib, /system/lib]]
+	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:497)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:457)
+	... 21 more
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/sdcard1/Downloads (edrwx)
+-----------------
+Feb 28, 2014 5:39:52 PM UTC
+Loading Xposed v42 (for com.android.commands.at.at)...
+Loading modules from /data/app/com.egingell.downloads2sd-2.apk
+  Loading class com.egingell.downloads2sd.XHook
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/sdcard1/Downloads (edrwx)
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/sdcard1/Downloads (edrwx)
+DIRECTORY_DOWNLOADS : /storage/emulated/0/Download => /storage/sdcard1/Downloads (edrwx)

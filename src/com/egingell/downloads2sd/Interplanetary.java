@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import android.os.Environment;
 import android.text.format.DateFormat;
@@ -18,7 +19,8 @@ public class Interplanetary {
 	public final static HashMap<String,String> catalog = new HashMap<String,String>();
 	public final static HashMap<String,String> revCatalog = new HashMap<String,String>();
 	public static Map<String,?> prefsMap;
-	static public Class<?> constants;
+	public static Class<?> constants;
+	public static Pattern splitColon = Pattern.compile(":");
 	public static void init(String callingClassName) {
 		tags.clear();
 		for (String s : new String[] {

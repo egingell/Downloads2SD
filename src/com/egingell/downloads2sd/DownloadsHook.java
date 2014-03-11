@@ -11,16 +11,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class DownloadsHook extends Activity {
@@ -77,14 +80,32 @@ public class DownloadsHook extends Activity {
 			}
 		}
 	};
+	private OnClickListener restoreDefaults = new OnClickListener() {
+		@Override
+		public void onClick(View button) {
+			String tag = (String) button.getTag();
+			File oldFile = Environment.getExternalStoragePublicDirectory(tag + ":orig");
+			EditText ev = (EditText) findViewByTag(tag + "_edit");
+			ev.setText(oldFile.getPath());
+			prefs.edit().putString(tag, oldFile.getPath()).commit();
+			Interplanetary.prefsMap = prefs.getAll();
+		}
+	};
 	@Override
 	public synchronized void onActivityResult(final int requestCode, int resultCode, final Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
             String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
-            if (new File(filePath).isFile()) {
+            File dir = new File(filePath);
+            if (dir.isFile()) {
 				try {
 					throw new Throwable(filePath + " is not a directory.");
 				} catch (Throwable e) {}
+            } else {
+            	if (!dir.mkdirs()) {
+            		try {
+    					throw new Throwable(filePath + " unable to create directory.");
+    				} catch (Throwable e) {}
+            	}
             }
             final String whichDialog = data.getStringExtra("whichDialog");
 			EditText ev = (EditText) findViewByTag(whichDialog + "_edit");
@@ -96,19 +117,41 @@ public class DownloadsHook extends Activity {
 		}
     }
 	private HashMap<String,View> mViews = new HashMap<String,View>();
+	@SuppressLint("NewApi")
 	private void addLayout(String tag) {
 		//Log.d(common.ME, common.date() + ": attempting to add " + text + " to listview");
-		try {			
-			LinearLayout layout = new LinearLayout(top.getContext());
+		try {
+			int index;
+			final Display display = getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getSize(size);
+			int width = size.x - 10;
+			final LayoutParams layouts = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT),
+							   buttonLayouts = new LayoutParams(width / 2, ViewGroup.LayoutParams.WRAP_CONTENT);
+			LinearLayout layout = new LinearLayout(top.getContext()), buttons = new LinearLayout(top.getContext());
+			
 			layout.setOrientation(LinearLayout.VERTICAL);
-			final LinearLayout.LayoutParams layouts = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			buttons.setOrientation(LinearLayout.HORIZONTAL);
+			
 			// Browse
 			Button browse = new Button(layout.getContext());
 			browse.setText(R.string.browse);
-			browse.setLayoutParams(layouts);
+			browse.setLayoutParams(buttonLayouts);
 			browse.setTag(tag);
 			browse.setOnClickListener(function);
 			mViews.put(tag, browse);
+			
+			// Reset
+			Button restore = new Button(layout.getContext());
+			restore.setText(R.string.restore);
+			restore.setLayoutParams(buttonLayouts);
+			restore.setTag(tag);
+			restore.setOnClickListener(restoreDefaults);
+			mViews.put(tag, restore);
+			
+			index = 0;
+			buttons.addView(browse, index++);
+			buttons.addView(restore, index++);
 			
             TextView appText = new TextView(layout.getContext());
             appText.setText(Interplanetary.catalog.get(tag));
@@ -128,10 +171,10 @@ public class DownloadsHook extends Activity {
             ev.setSingleLine();
             mViews.put(tag + "_edit", ev);
 
-            int index = 0;
+            index = 0;
 			layout.addView(appText, index++);
 			layout.addView(ev, index++);
-			layout.addView(browse, index++);
+			layout.addView(buttons, index++);
 			
 			top.addView(layout, listCount++);
 			//Log.d(common.ME, common.date() + ": adding " + text + ":" + tag + " to listview at position " + Integer.toString(listCount));

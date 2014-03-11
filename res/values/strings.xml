@@ -8,6 +8,7 @@
     <string name="cancel">Cancel</string>
     <string name="create">Save</string>
     <string name="no_data">No Data</string>
+    <string name="restore">Default</string>
     <color name="gray">#ffff0000</color>
     <string name="err">Error</string>
     <string name="app_name">Downloads2SD</string>

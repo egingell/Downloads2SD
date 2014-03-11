@@ -20,6 +20,7 @@ import android.util.Log;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
@@ -53,6 +54,8 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 				XposedHelpers.findAndHookMethod(clazz, "getExternalStoragePublicDirectory", String.class, new XC_MethodReplacement() {
 					@Override
 					protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+						xprefs.reload();
+						Interplanetary.prefsMap = xprefs.getAll();
 						File oldFile = ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args)),
 							 newFile = null;
 						String oldPath = oldFile.getPath(),
@@ -68,6 +71,17 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 							canWrite = newFile.canWrite();
 							canExecute = newFile.canExecute();
 						}
+						try {
+							if (Interplanetary.splitColon.matcher(key).find()) {
+								String[] split = Interplanetary.splitColon.split(key);
+								if (split[1].equals("orig")) {
+									param.args[0] = split[0];
+									return ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args));
+								}
+							}
+						} catch (Throwable e) {
+							XposedBridge.log(e);
+						}
 						String perms = (exists ? "e" : "-") + (isDirectory ? "d" : "-") + (canRead ? "r" : "-") + (canWrite ? "w" : "-") + (canExecute ? "x" : "-");
 						XposedBridge.log(key + " : " + oldPath + " => " + newPath + " (" + perms + ")");
 						return (newFile == null ||! isDirectory ||! exists ||! canRead ||! canWrite) ? oldFile : newFile;
@@ -81,89 +95,36 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 		}
 		try {
 			if (lpparam.packageName.equals("com.android.providers.downloads")) {
-				final File[] mExternalStoragePublicDir = findExtSdCards();
-		        try {
-					final Class<?> cStorageManager = XposedHelpers.findClass("com.android.providers.downloads.StorageManager", lpparam.classLoader);
-					final Class<?> cConstants = XposedHelpers.findClass("com.android.providers.downloads.Constants", lpparam.classLoader);
-					final Class<?> cDownloadsImpl = XposedHelpers.findClass("android.provider.Downloads$Impl", lpparam.classLoader);
-					XposedHelpers.findAndHookMethod(cStorageManager, "verifySpace", int.class, String.class, long.class, new XC_MethodReplacement() {
-						@Override
-						protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-							Log.d(Interplanetary.ME, "Calling com.android.providers.downloads.StorageManager#verifySpace");
-							XposedHelpers.callMethod(param.thisObject, "resetBytesDownloadedSinceLastCheckOnSpace");
-							int destination = (Integer) param.args[0];
-							String path = (String) param.args[1];
-							long length = (Long) param.args[2];
-							
-					        File dir = null;
-					        if (XposedHelpers.getStaticBooleanField(cConstants, "LOGV")) {
-					        	
-					            Log.i((String) XposedHelpers.getStaticObjectField(cConstants, "TAG"), "in verifySpace, destination: " + destination + ", path: " + path + ", length: " + length);
-					        }
-					        if (path == null) {
-					            throw new IllegalArgumentException("path can't be null");
-					        }
-					        File mExternalStorageDir = (File) XposedHelpers.getObjectField(param.thisObject, "mExternalStorageDir"),
-					        	 mSystemCacheDir = (File) XposedHelpers.getObjectField(param.thisObject, "mSystemCacheDir"),
-					        	 mDownloadDataDir = (File) XposedHelpers.getObjectField(param.thisObject, "mDownloadDataDir");
-					        final int DESTINATION_CACHE_PARTITION = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_CACHE_PARTITION"),
-					        		  DESTINATION_CACHE_PARTITION_NOROAMING = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_CACHE_PARTITION_NOROAMING"),
-					        		  DESTINATION_CACHE_PARTITION_PURGEABLE = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_CACHE_PARTITION_PURGEABLE"),
-					        		  DESTINATION_EXTERNAL = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_EXTERNAL"),
-							          DESTINATION_SYSTEMCACHE_PARTITION = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_SYSTEMCACHE_PARTITION"),
-							       	  DESTINATION_FILE_URI = XposedHelpers.getStaticIntField(cDownloadsImpl, "DESTINATION_FILE_URI");
-					        if (destination == DESTINATION_CACHE_PARTITION || destination == DESTINATION_CACHE_PARTITION_NOROAMING || destination == DESTINATION_CACHE_PARTITION_PURGEABLE) {
-				                dir = mDownloadDataDir;
-					        } else if (destination == DESTINATION_EXTERNAL) {
-					            dir = mExternalStorageDir;
-					        } else if (destination == DESTINATION_SYSTEMCACHE_PARTITION) {
-				                dir = mSystemCacheDir;
-					        } else if (destination == DESTINATION_FILE_URI) {
-				                if (path.startsWith(mExternalStorageDir.getPath())) {
-				                    dir = mExternalStorageDir;
-				                } else if (path.startsWith(mDownloadDataDir.getPath())) {
-				                    dir = mDownloadDataDir;
-				                } else if (path.startsWith(mSystemCacheDir.getPath())) {
-				                    dir = mSystemCacheDir;
-				                }
-					        }
-					        if (mExternalStoragePublicDir != null) {
-					        	for (File f : mExternalStoragePublicDir) {
-					        		if (path.startsWith(f.getPath())) {
-					        			dir = f;
-					        		}
-					        	}
-					        }
-					        if (dir == null) {
-					            throw new IllegalStateException("invalid combination of destination: " + destination + ", path: " + path);
-					        }
-					        XposedHelpers.callMethod(param.thisObject, "findSpace", dir, length, destination);
-					        return null;
-						}
-					});
-				} catch(Throwable e) {
-					XposedBridge.log(e);
-				}
 				try {
-					XposedHelpers.findAndHookMethod("com.android.providers.downloads.DownloadProvider", lpparam.classLoader, "checkFileUriDestination", ContentValues.class, new XC_MethodReplacement() {
+					XposedHelpers.findAndHookMethod("com.android.providers.downloads.DownloadProvider", lpparam.classLoader, "checkFileUriDestination", ContentValues.class, new XC_MethodHook() {
 						@Override
-						protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-							Log.d(Interplanetary.ME, "Calling com.android.providers.downloads.DownloadProvider#checkFileUriDestination");
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+							Log.d(Interplanetary.ME, "Calling com.android.providers.downloads.DownloadProvider#checkFileUriDestination#after");
+							
+							ContentValues values = (ContentValues) param.args[0];
+							if (values.containsKey("oldhint")) {
+								values.remove(hint);
+								values.put(hint, values.getAsString("oldhint"));
+								values.remove("oldhint");
+							}							
+						}
+						@Override
+						protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+							Log.d(Interplanetary.ME, "Calling com.android.providers.downloads.DownloadProvider#checkFileUriDestination#before");
 							ContentValues values = (ContentValues) param.args[0];
 							String fileUri = values.getAsString(hint);
-					        if (fileUri == null) {
-					            throw new IllegalArgumentException("DESTINATION_FILE_URI must include a file URI under COLUMN_FILE_NAME_HINT");
-					        }
-					        Uri uri = Uri.parse(fileUri);
-					        String scheme = uri.getScheme();
-					        if (scheme == null || !scheme.equals("file")) {
-					            throw new IllegalArgumentException("Not a file URI: " + uri);
-					        }
-					        final String path = uri.getPath();
-					        if (path == null) {
-					            throw new IllegalArgumentException("Invalid file URI: " + uri);
-					        }
-							return null;
+							XposedBridge.log(Interplanetary.ME + ": " + fileUri);
+							values.put("oldhint", fileUri);
+							final String path = Uri.parse(fileUri).getPath();
+							if (path == null) {
+								return;
+							}
+							final String canonicalPath = new File(path).getCanonicalPath();
+							final String externalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+							if (!canonicalPath.startsWith(externalPath)) {
+								values.remove(hint);
+								values.put(hint, "file://" + canonicalPath);
+							}
 						}
 					});
 				} catch(Throwable e) {
