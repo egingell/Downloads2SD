@@ -113,7 +113,6 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 							Log.d(Interplanetary.ME, "Calling com.android.providers.downloads.DownloadProvider#checkFileUriDestination#before");
 							ContentValues values = (ContentValues) param.args[0];
 							String fileUri = values.getAsString(hint);
-							XposedBridge.log(Interplanetary.ME + ": " + fileUri);
 							values.put("oldhint", fileUri);
 							final String path = Uri.parse(fileUri).getPath();
 							if (path == null) {
@@ -123,8 +122,10 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 							final String externalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
 							if (!canonicalPath.startsWith(externalPath)) {
 								values.remove(hint);
-								values.put(hint, "file://" + canonicalPath);
+								values.put(hint, "file://" + externalPath);
 							}
+							XposedBridge.log(Interplanetary.ME + ": before " + fileUri);
+							XposedBridge.log(Interplanetary.ME + ": after " + values.getAsString(hint));
 						}
 					});
 				} catch(Throwable e) {
