@@ -21,7 +21,6 @@ import android.util.Log;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -51,12 +50,12 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 		try {
 			Class<?> clazz = Environment.class;
 			try {
-				XposedHelpers.findAndHookMethod(clazz, "getExternalStoragePublicDirectory", String.class, new XC_MethodReplacement() {
+				XposedHelpers.findAndHookMethod(clazz, "getExternalStoragePublicDirectory", String.class, new XC_MethodHook() {
 					@Override
-					protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 						xprefs.reload();
 						Interplanetary.prefsMap = xprefs.getAll();
-						File oldFile = ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args)),
+						File oldFile = (File) param.getResult(),
 							 newFile = null;
 						String oldPath = oldFile.getPath(),
 							   key = Interplanetary.revCatalog.get((String) param.args[0]),
@@ -76,7 +75,8 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 								String[] split = Interplanetary.splitColon.split(key);
 								if (split[1].equals("orig")) {
 									param.args[0] = split[0];
-									return ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args));
+									return;
+									//return ((File) XposedBridge.invokeOriginalMethod(param.method, param.thisObject, param.args));
 								}
 							}
 						} catch (Throwable e) {
@@ -84,7 +84,11 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 						}
 						String perms = (exists ? "e" : "-") + (isDirectory ? "d" : "-") + (canRead ? "r" : "-") + (canWrite ? "w" : "-") + (canExecute ? "x" : "-");
 						XposedBridge.log(key + " : " + oldPath + " => " + newPath + " (" + perms + ")");
-						return (newFile == null ||! isDirectory ||! exists ||! canRead ||! canWrite) ? oldFile : newFile;
+						if (newFile == null ||! isDirectory ||! exists ||! canRead ||! canWrite) {
+							param.setResult(oldFile);
+						} else {
+							param.setResult(newFile);
+						}
 					}
 				});
 			} catch(Throwable e) {
