@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import org.xmlpull.v1.XmlPullParser;
+
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Environment;
@@ -31,6 +33,8 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	final static File sDir = new File(Environment.getDataDirectory(), "data/com.egingell.downloads2sd/shared_prefs/prefs.xml");
 	final static XSharedPreferences xprefs = new XSharedPreferences(sDir);
 	String hint;
+	public XC_MethodHook externalSdCardAccessHook;
+
 	public XHook() throws Throwable {
 		xprefs.makeWorldReadable();
 		Interplanetary.init(this.getClass().getName());
@@ -44,9 +48,61 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
 		PATH = startupParam.modulePath;
+		
+		externalSdCardAccessHook = new XC_MethodHook() {
+			@Override
+			protected void afterHookedMethod(MethodHookParam param)
+					throws Throwable {
+				prefs.reload();
+				String permission = (String) param.args[1];
+				if (permission
+						.equals("android.permission.WRITE_EXTERNAL_STORAGE")
+						|| permission
+								.equals("android.permission.ACCESS_ALL_EXTERNAL_STORAGE")) {
+					Class<?> process = XposedHelpers.findClass(
+							"android.os.Process", null);
+					int gid = (Integer) XposedHelpers.callStaticMethod(process,
+							"getGidForName", "media_rw");
+					Object permissions = null;
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+						permissions = XposedHelpers.getObjectField(
+								param.thisObject, "mPermissions");
+					} else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+						Object settings = XposedHelpers.getObjectField(
+								param.thisObject, "mSettings");
+						permissions = XposedHelpers.getObjectField(settings,
+								"mPermissions");
+					}
+					Object bp = XposedHelpers.callMethod(permissions, "get",
+							permission);
+					int[] bpGids = (int[]) XposedHelpers.getObjectField(bp,
+							"gids");
+					XposedHelpers.setObjectField(bp, "gids",
+							appendInt(bpGids, gid));
+				}
+			}
+		};
 	}
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
+		if ("android".equals(lpparam.packageName)
+				&& "android".equals(lpparam.processName)) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				XposedHelpers.findAndHookMethod(
+						XposedHelpers.findClass(
+								"com.android.server.SystemConfig",
+								lpparam.classLoader), "readPermission",
+						XmlPullParser.class, String.class,
+						externalSdCardAccessHook);
+			} else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+				XposedHelpers.findAndHookMethod(XposedHelpers.findClass(
+						"com.android.server.pm.PackageManagerService",
+						lpparam.classLoader), "readPermission",
+						XmlPullParser.class, String.class,
+						externalSdCardAccessHook);
+			}
+		}
+
 		try {
 			Class<?> clazz = Environment.class;
 			try {
@@ -196,5 +252,22 @@ public class XHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 			Log.e(Interplanetary.ME, Interplanetary.date(), e);
 		}
 		return files;
+	}
+	
+
+	public int[] appendInt(int[] cur, int val) {
+		if (cur == null) {
+			return new int[] { val };
+		}
+		final int N = cur.length;
+		for (int i = 0; i < N; i++) {
+			if (cur[i] == val) {
+				return cur;
+			}
+		}
+		int[] ret = new int[N + 1];
+		System.arraycopy(cur, 0, ret, 0, N);
+		ret[N] = val;
+		return ret;
 	}
 }
